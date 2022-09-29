@@ -1,32 +1,21 @@
-package br.com.cinemaflix.modelo;
+package br.com.cinemaflix.controller.form;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-@Entity
-public class Video {
-	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
+import br.com.cinemaflix.modelo.Video;
+import br.com.cinemaflix.repository.VideoRepository;
+
+public class VideoForm {
+
+	@NotEmpty @Length(min = 30)
 	private String titulo;
+	@NotEmpty @Length(min = 30)
 	private String descricao;
+	@NotEmpty @Length(min = 40)
 	private String url;
 	
-	public Video() {
-	}
-	
-	public Video(String titulo,String descricao, String url) {
-		this.titulo = titulo;
-		this.descricao = descricao;
-		this.url = url;
-		
-	}
 	public String getTitulo() {
 		return titulo;
 	}
@@ -45,9 +34,9 @@ public class Video {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public Long getId() {
-		return id;
-	}
-	
+	public Video converter(VideoRepository videoRepository) {	
+		return new Video(this.titulo, this.descricao, this.url);
+	}	
+		
 	
 }
