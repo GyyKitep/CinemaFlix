@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,53 +18,53 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.cinemaflix.controller.dto.DetalhesDoVideoDto;
+import br.com.cinemaflix.controller.dto.CategoriaDto;
+import br.com.cinemaflix.controller.dto.DetalhesDoCategoriaDto;
 import br.com.cinemaflix.controller.dto.VideoDto;
+import br.com.cinemaflix.controller.form.CategoriaForm;
 import br.com.cinemaflix.controller.form.VideoForm;
+import br.com.cinemaflix.modelo.Categoria;
 import br.com.cinemaflix.modelo.Video;
-import br.com.cinemaflix.repository.VideoRepository;
+import br.com.cinemaflix.repository.CategoriaRepository;
 
 @RestController  
-@RequestMapping("/video")
-public class VideoController {
+@RequestMapping("/categoria")
+public class CategoriaController {
 	
 	@Autowired
-	private VideoRepository videoRepository;
+	private CategoriaRepository categoriaRepository;
 	
 	@GetMapping
-	public List<VideoDto> listarVideos(){
+	public List<CategoriaDto> listarVideos(){
 	
-		List<Video> videos = videoRepository.findAll();				
+		List<Categoria> categorias = categoriaRepository.findAll();				
 		
-		return VideoDto.converter(videos);
+		return CategoriaDto.converter(categorias);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<DetalhesDoVideoDto> detalharVideo (@PathVariable Long id) {   
+	public ResponseEntity<DetalhesDoCategoriaDto> detalharVideo (@PathVariable Long id) {   
 		
-		Optional<Video> video = videoRepository.findById(id);	
+		Optional<Categoria> categoria = categoriaRepository.findById(id);	
 		
-		if  (video.isPresent()) {
-			return ResponseEntity.ok(new DetalhesDoVideoDto(video.get()));
+		if  (categoria.isPresent()) {
+			return ResponseEntity.ok(new DetalhesDoCategoriaDto(categoria.get()));
 		}
 		
 		return ResponseEntity.notFound().build();
 
 	}	
 	
+	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<VideoDto> cadastrar(@RequestBody @Valid VideoForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<CategoriaDto> cadastrar(@RequestBody @Valid CategoriaForm form, UriComponentsBuilder uriBuilder) {
 		
-		if (!form.getUrl().startsWith("https://")) {
-			return ResponseEntity.badRequest().build();
-		}
+		Categoria categoria = form.converter(categoriaRepository);		
+		categoriaRepository.save(categoria);
+		URI uri = uriBuilder.path("/video/{id}").buildAndExpand(categoria.getId()).toUri();
 		
-		Video video = form.converter(videoRepository);		
-		videoRepository.save(video);
-		URI uri = uriBuilder.path("/video/{id}").buildAndExpand(video.getId()).toUri();
-		
-		return ResponseEntity.created(uri).body(new VideoDto(video));
+		return ResponseEntity.created(uri).body(new CategoriaDto(categoria));
 		
 	}	
 	
@@ -73,18 +72,16 @@ public class VideoController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> remover(@PathVariable long id){
 		
-		Optional<Video> optional = videoRepository.findById(id);
+		Optional<Categoria> optional = categoriaRepository.findById(id);
 		
 		if  (optional.isPresent()) {
-			videoRepository.deleteById(id);
+			categoriaRepository.deleteById(id);
 			
 			return ResponseEntity.ok().build();
 		}
 		
 		return ResponseEntity.notFound().build();		
 
-	}	
-	
-	
-
+	}		
+		
 }
