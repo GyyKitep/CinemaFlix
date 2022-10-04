@@ -7,4 +7,5 @@ import br.com.cinemaflix.modelo.Categoria;
 public interface CategoriaRepository extends JpaRepository<Categoria, Long>{
 
 	Categoria findByTitulo(String titulo);
+
 }

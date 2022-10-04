@@ -6,13 +6,13 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.http.ResponseEntity;
 
 import br.com.cinemaflix.modelo.Categoria;
 import br.com.cinemaflix.modelo.Video;
 import br.com.cinemaflix.repository.CategoriaRepository;
+import br.com.cinemaflix.repository.VideoRepository;
 
-public class VideoForm {
+public class AtualizacaoVideoForm {
 
 	@NotEmpty @Length(min = 30)
 	private String titulo;
@@ -22,7 +22,7 @@ public class VideoForm {
 	private String url;
 	@NotNull
 	private Long categoria;
-	
+
 	public Long getCategoria() {
 		return this.categoria;
 	}
@@ -48,15 +48,18 @@ public class VideoForm {
 		this.url = url;
 	}
 	
-	public Video converter(CategoriaRepository categoriaRepository) {	
+	public Video atualizar(long id, VideoRepository videoRepository,CategoriaRepository categoriaRepository) {
 		Optional<Categoria> categoria = categoriaRepository.findById(this.categoria);	
 		
 		if  (!categoria.isPresent()) {
 			return null;
-		}					
+		}			
 		
-		return new Video(this.titulo, this.descricao, this.url, categoria.get());
+		Video video = videoRepository.getReferenceById(id);
+		video.setTitulo(this.titulo);
+		video.setDescricao(this.descricao);
+		video.setUrl(this.url);
+		return video;
 	}	
-		
 	
 }

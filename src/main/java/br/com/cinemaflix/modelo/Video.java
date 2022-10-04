@@ -1,9 +1,14 @@
 package br.com.cinemaflix.modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
@@ -18,15 +23,27 @@ public class Video {
 	private String descricao;
 	private String url;
 	
+	@ManyToOne
+	private Categoria categoria;		
+	
 	public Video() {
 	}
 	
-	public Video(String titulo,String descricao, String url) {
+	public Video(String titulo,String descricao, String url, Categoria categoria) {
 		this.titulo = titulo;
 		this.descricao = descricao;
 		this.url = url;
+		this.categoria = categoria;
 		
 	}
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
 	public String getTitulo() {
 		return titulo;
 	}
@@ -48,6 +65,7 @@ public class Video {
 	public Long getId() {
 		return id;
 	}
+
 	
 	
 }

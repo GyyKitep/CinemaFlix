@@ -26,6 +26,7 @@ import br.com.cinemaflix.controller.form.VideoForm;
 import br.com.cinemaflix.modelo.Categoria;
 import br.com.cinemaflix.modelo.Video;
 import br.com.cinemaflix.repository.CategoriaRepository;
+import br.com.cinemaflix.repository.VideoRepository;
 
 @RestController  
 @RequestMapping("/categoria")
@@ -54,6 +55,8 @@ public class CategoriaController {
 		return ResponseEntity.notFound().build();
 
 	}	
+	
+	
 	
 	
 	@PostMapping

@@ -3,6 +3,7 @@ package br.com.cinemaflix.controller.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.cinemaflix.modelo.Categoria;
 import br.com.cinemaflix.modelo.Video;
 
 public class VideoDto {
@@ -11,17 +12,27 @@ public class VideoDto {
 	private String titulo;
 	private String descricao;
 	private String url;
+	private Categoria categoria;
 	
 	public VideoDto(Video video) {
 		this.id = video.getId();
 		this.titulo = video.getTitulo();
 		this.descricao = video.getDescricao();
 		this.url = video.getUrl();
+		this.categoria = video.getCategoria();
 	}
 	
 	public Long getId() {
 		return id;
 	}
+	
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}	
 
 
 	public String getTitulo() {

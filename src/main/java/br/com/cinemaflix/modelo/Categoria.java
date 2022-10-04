@@ -13,7 +13,7 @@ public class Categoria {
 	
 	private String titulo;
 	private String cor;
-	
+
 	public Categoria() {
 	}
 	
