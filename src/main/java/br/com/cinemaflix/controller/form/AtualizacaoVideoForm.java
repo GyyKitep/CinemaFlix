@@ -3,7 +3,6 @@ package br.com.cinemaflix.controller.form;
 import java.util.Optional;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -20,7 +19,7 @@ public class AtualizacaoVideoForm {
 	private String descricao;
 	@NotEmpty @Length(min = 40)
 	private String url;
-	@NotNull
+	
 	private Long categoria;
 
 	public Long getCategoria() {
@@ -49,6 +48,10 @@ public class AtualizacaoVideoForm {
 	}
 	
 	public Video atualizar(long id, VideoRepository videoRepository,CategoriaRepository categoriaRepository) {
+		if(this.categoria == null) {
+			this.categoria = (long) 1;
+		}
+		
 		Optional<Categoria> categoria = categoriaRepository.findById(this.categoria);	
 		
 		if  (!categoria.isPresent()) {

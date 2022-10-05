@@ -22,7 +22,6 @@ import br.com.cinemaflix.controller.dto.CategoriaDto;
 import br.com.cinemaflix.controller.dto.DetalhesDoCategoriaDto;
 import br.com.cinemaflix.controller.dto.VideoDto;
 import br.com.cinemaflix.controller.form.CategoriaForm;
-import br.com.cinemaflix.controller.form.VideoForm;
 import br.com.cinemaflix.modelo.Categoria;
 import br.com.cinemaflix.modelo.Video;
 import br.com.cinemaflix.repository.CategoriaRepository;
@@ -34,6 +33,9 @@ public class CategoriaController {
 	
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
+	private VideoRepository videoRepository;
 	
 	@GetMapping
 	public List<CategoriaDto> listarVideos(){
@@ -56,7 +58,13 @@ public class CategoriaController {
 
 	}	
 	
-	
+	@GetMapping("/{id}/video")
+	public List<VideoDto> detalharVideoPorCategoria (@PathVariable Long id) {   
+		
+		List<Video> videos = videoRepository.agrupaVideoPorCategoria(id);	
+		return VideoDto.converter(videos);
+		
+	}	
 	
 	
 	@PostMapping
@@ -85,6 +93,7 @@ public class CategoriaController {
 		
 		return ResponseEntity.notFound().build();		
 
-	}		
+	}	
+	
 		
 }

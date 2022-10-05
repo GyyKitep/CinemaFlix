@@ -20,7 +20,7 @@ public class VideoForm {
 	private String descricao;
 	@NotEmpty @Length(min = 40)
 	private String url;
-	@NotNull
+	
 	private Long categoria;
 	
 	public Long getCategoria() {
@@ -49,6 +49,10 @@ public class VideoForm {
 	}
 	
 	public Video converter(CategoriaRepository categoriaRepository) {	
+		if(this.categoria == null) {
+			this.categoria = (long) 1;
+		}		
+		
 		Optional<Categoria> categoria = categoriaRepository.findById(this.categoria);	
 		
 		if  (!categoria.isPresent()) {

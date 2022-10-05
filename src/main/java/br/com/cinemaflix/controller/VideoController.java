@@ -1,6 +1,7 @@
 package br.com.cinemaflix.controller;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -38,18 +40,15 @@ public class VideoController {
 	private CategoriaRepository categoriaRepository;
 	
 	@GetMapping
-	public List<VideoDto> listarVideos(){
-	
-		List<Video> videos = videoRepository.findAll();				
+	public List<VideoDto> listarVideos(@RequestParam(required = false, name = "search") String search){
 		
-		return VideoDto.converter(videos);
-	}
-	
-	@GetMapping("/videos/?search={titulo}")
-	public List<VideoDto> listarVideosPorTitulo(@PathVariable String titulo){
-		titulo = titulo.replaceAll("+"," ");
-		List<Video> videos = videoRepository.findByTitulo(titulo);				
-		
+		List<Video> videos = new ArrayList<>();
+		if(search == null) {
+			videos = videoRepository.findAll();				
+		}else {
+			String titulo = "%" + search + "%";
+			videos = videoRepository.carregarPorDoParteTitulo(titulo);
+		}
 		return VideoDto.converter(videos);
 	}
 	
