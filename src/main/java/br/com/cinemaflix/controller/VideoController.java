@@ -52,6 +52,7 @@ public class VideoController {
 		return VideoDto.converter(videos);
 	}
 	
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<DetalhesDoVideoDto> detalharVideo (@PathVariable Long id) {   
 		
@@ -104,6 +105,7 @@ public class VideoController {
 		
 		if  (optional.isPresent()) {
 			Video video = form.atualizar(id, videoRepository, categoriaRepository); 
+			videoRepository.save(video);
 			
 			return ResponseEntity.ok(new VideoDto(video));
 		}
